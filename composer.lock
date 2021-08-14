@@ -1,0 +1,140 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "c112bc11ea64881d347d41dc06689ed9",
+    "packages": [
+        {
+            "name": "stenway/reliabletxt",
+            "version": "0.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Stenway/ReliableTXT-PHP.git",
+                "reference": "93df368c48aa2c72f480e697e915efe75241ba87"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Stenway/ReliableTXT-PHP/zipball/93df368c48aa2c72f480e697e915efe75241ba87",
+                "reference": "93df368c48aa2c72f480e697e915efe75241ba87",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Stenway\\ReliableTxt\\": "src/Stenway/ReliableTxt"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Stefan John",
+                    "email": "dev@stenway.com"
+                }
+            ],
+            "description": "ReliableTXT reference library",
+            "homepage": "https://www.reliabletxt.com",
+            "support": {
+                "issues": "https://github.com/Stenway/ReliableTXT-PHP/issues",
+                "source": "https://github.com/Stenway/ReliableTXT-PHP/tree/0.0.2"
+            },
+            "time": "2021-07-27T19:07:34+00:00"
+        },
+        {
+            "name": "stenway/sml",
+            "version": "0.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Stenway/SML-PHP.git",
+                "reference": "7cf999acc5434bd8d32f4fbc61cb9fb5db94e4e8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Stenway/SML-PHP/zipball/7cf999acc5434bd8d32f4fbc61cb9fb5db94e4e8",
+                "reference": "7cf999acc5434bd8d32f4fbc61cb9fb5db94e4e8",
+                "shasum": ""
+            },
+            "require": {
+                "stenway/reliabletxt": "^0.0.2",
+                "stenway/wsv": "^0.0.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Stenway\\Sml\\": "src/Stenway/Sml"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Stefan John",
+                    "email": "dev@stenway.com"
+                }
+            ],
+            "description": "The Simple Markup Language (SML) reference library",
+            "homepage": "https://www.simpleml.com",
+            "support": {
+                "issues": "https://github.com/Stenway/SML-PHP/issues",
+                "source": "https://github.com/Stenway/SML-PHP/tree/0.0.3"
+            },
+            "time": "2021-07-27T19:29:31+00:00"
+        },
+        {
+            "name": "stenway/wsv",
+            "version": "0.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Stenway/WSV-PHP.git",
+                "reference": "25539378b483cc49721ec9ad904dad7f6f90ba43"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Stenway/WSV-PHP/zipball/25539378b483cc49721ec9ad904dad7f6f90ba43",
+                "reference": "25539378b483cc49721ec9ad904dad7f6f90ba43",
+                "shasum": ""
+            },
+            "require": {
+                "stenway/reliabletxt": "^0.0.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Stenway\\Wsv\\": "src/Stenway/Wsv"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Stefan John",
+                    "email": "dev@stenway.com"
+                }
+            ],
+            "description": "WhitespaceSV (WSV) reference library",
+            "homepage": "https://www.whitespacesv.com",
+            "support": {
+                "issues": "https://github.com/Stenway/WSV-PHP/issues",
+                "source": "https://github.com/Stenway/WSV-PHP/tree/0.0.2"
+            },
+            "time": "2021-07-27T19:21:45+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": [],
+    "plugin-api-version": "2.1.0"
+}

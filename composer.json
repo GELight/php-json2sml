@@ -1,0 +1,26 @@
+{
+  "name": "gelight/php-json2sml",
+  "description": "PHP Library for conversion JSON to SML",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "type": "library",
+  "authors": [
+    {
+      "name": "Mario Linz",
+      "email": "gelight@gmx.de",
+      "homepage": "https://github.com/GELight/php-json2sml",
+      "role": "Developer"
+    }
+  ],
+  "support": {
+    "email": "gelight@gmx.de"
+  },
+  "autoload": {
+    "psr-4": {
+      "GELight\\": "src/"
+    }
+  },
+  "require": {
+    "stenway/sml": "^0.0.3"
+  }
+}
