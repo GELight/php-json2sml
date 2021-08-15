@@ -10,21 +10,16 @@ class JsonToSmlConverter {
 
     public function __construct() {}
 
-    /**
-     * @param $jsonObject
-     * @return SmlDocument
-     */
-    public static function convert($jsonObject): SmlDocument {
+    public static function convert(object $jsonObject): SmlDocument {
 
-        $root = new SmlElement("SML");
-		$doc = new SmlDocument($root);
         $settings = new JsonToSmlSettings();
+        $doc = new SmlDocument("SML");
 
-		JsonToSmlConverter::convertObj($jsonObject, $root, $settings);
+		JsonToSmlConverter::convertObj($jsonObject, $doc->getRoot(), $settings);
 
-		if ($settings->case === 1) {
+        if ($settings->case === 1) {
             $doc->setEndKeyword("end");
-            $root->setName("sml");
+            $doc->getRoot()->setName("sml");
         } else if ($settings->case === 2) {
             $doc->setEndKeyword("END");
         }
@@ -36,28 +31,26 @@ class JsonToSmlConverter {
 
 	public static function convertObj($jsonObject, SmlElement $smlElement, JsonToSmlSettings $settings) {
 		if (JsonToSmlConverter::isValue($jsonObject)) {
-            $smlElement.addString("Value", $jsonObject);
+            $smlElement->addString("Value", $jsonObject);
         } else if (JsonToSmlConverter::isSimpleArray($jsonObject)) {
-            $smlElement.addAttribute("Value", JsonToSmlConverter::getSimpleArrayValues($jsonObject));
+            $smlElement->addAttribute("Value", JsonToSmlConverter::getSimpleArrayValues($jsonObject));
         } else if (JsonToSmlConverter::isSimpleMatrix($jsonObject)) {
-            $smlElement.addAttribute("Value", JsonToSmlConverter::getSimpleMatrixValues($jsonObject));
+            $smlElement->addAttribute("Value", JsonToSmlConverter::getSimpleMatrixValues($jsonObject));
         } else if (JsonToSmlConverter::isComplexArray($jsonObject)) {
             $itemName = JsonToSmlConverter::getItemName(null);
             JsonToSmlConverter::convertComplexArray($jsonObject, $smlElement, $itemName, $settings);
         } else if (JsonToSmlConverter::isObject($jsonObject)) {
             JsonToSmlConverter::convertObjProperties($jsonObject, $smlElement, $settings);
         } else {
-            $smlElement.addString("...", "...");
+            $smlElement->addString("...", "...");
         }
 	}
 
 	public static function convertObjProperties($jsonObject, SmlElement $smlElement, JsonToSmlSettings $settings) {
-        foreach ($jsonObject as $key) {
-            echo $key."<br/>";
+        foreach ($jsonObject as $key => $value) {
 
             $settings->scan($key);
 
-            $value = $jsonObject[$key];
             if (JsonToSmlConverter::isValue($value)) {
                 $smlElement->addString($key, $value);
             } else if (JsonToSmlConverter::isSimpleArray($value)) {
@@ -77,17 +70,17 @@ class JsonToSmlConverter {
         }
 	}
 
-	public static function convertComplexArray(array $array, SmlElement $smlElement, string $itemName, JsonToSmlSettings $settings) {
-		foreach ($array as $item) {
-            if (JsonToSmlConverter::isValue($item)) {
-                $smlElement->addString($itemName, $item);
-            } else if (JsonToSmlConverter::isSimpleArray($item)) {
-                $smlElement->addAttribute($itemName, JsonToSmlConverter::getSimpleArrayValues($item));
-            } else if (JsonToSmlConverter::isSimpleMatrix($item)) {
-                $smlElement->addAttribute($itemName, JsonToSmlConverter::getSimpleMatrixValues($item));
+	public static function convertComplexArray(array $props, SmlElement $smlElement, string $itemName, JsonToSmlSettings $settings) {
+		foreach ($props as $property) {
+            if (JsonToSmlConverter::isValue($property)) {
+                $smlElement->addString($itemName, $property);
+            } else if (JsonToSmlConverter::isSimpleArray($property)) {
+                $smlElement->addAttribute($itemName, JsonToSmlConverter::getSimpleArrayValues($property));
+            } else if (JsonToSmlConverter::isSimpleMatrix($property)) {
+                $smlElement->addAttribute($itemName, JsonToSmlConverter::getSimpleMatrixValues($property));
             } else {
                 $childSmlElement = $smlElement->addElement($itemName);
-                JsonToSmlConverter::convertObj($item, $childSmlElement, $settings);
+                JsonToSmlConverter::convertObj($property, $childSmlElement, $settings);
             }
         }
 	}
@@ -96,12 +89,13 @@ class JsonToSmlConverter {
         return substr($name, 0, -1) . $pattern;
 	}
 
-	public static function getItemName(string|null $name): string {
-		if (!is_null($name) && count($name) > 0) {
-            if ($name.endsWith("IES")) return JsonToSmlConverter::replaceLast($name,3,"Y");
-            if ($name.endsWith("ies")) return JsonToSmlConverter::replaceLast($name,3,"y");
-            if ($name.endsWith("S")) return JsonToSmlConverter::replaceLast($name,1,"");
-            if ($name.endsWith("s")) return JsonToSmlConverter::replaceLast($name,1,"");
+	#[Pure]
+    public static function getItemName(string|null $name): string {
+		if (!is_null($name) && strlen($name) > 0) {
+            if (str_ends_with($name, "IES")) return JsonToSmlConverter::replaceLast($name,3,"Y");
+            if (str_ends_with($name, "ies")) return JsonToSmlConverter::replaceLast($name,3,"y");
+            if (str_ends_with($name, "S")) return JsonToSmlConverter::replaceLast($name,1,"");
+            if (str_ends_with($name, "s")) return JsonToSmlConverter::replaceLast($name,1,"");
         }
 		return "item";
 	}
@@ -133,10 +127,12 @@ class JsonToSmlConverter {
 	}
 
 	public static function isValue($jsonObject): bool {
-		return $jsonObject == null ||
+		return $jsonObject === null ||
             is_numeric($jsonObject) ||
             is_string($jsonObject) ||
-            is_bool($jsonObject);
+            is_bool($jsonObject) &&
+            !is_array($jsonObject) &&
+            !is_object($jsonObject);
 	}
 
 	#[Pure]
@@ -152,7 +148,6 @@ class JsonToSmlConverter {
 		return true;
 	}
 
-	#[Pure]
     public static function isSimpleMatrix($jsonObject): bool {
 		if (!is_array($jsonObject)) {
             return false;
@@ -162,7 +157,7 @@ class JsonToSmlConverter {
                 return false;
             }
         }
-		$firstLength = count($jsonObject[0]);
+		echo $firstLength = count($jsonObject[0]);
         foreach ($jsonObject as $item) {
             if (count($item) != $firstLength) {
                 return false;
@@ -176,8 +171,8 @@ class JsonToSmlConverter {
 		return is_array($jsonObject) && !JsonToSmlConverter::isSimpleArray($jsonObject);
 	}
 
-	public static function isObject($jsonObject):bool {
-		return !is_null($jsonObject) && !is_array($jsonObject) && gettype($jsonObject) === "object";
+	public static function isObject($jsonObject): bool {
+		return !is_array($jsonObject) && is_object($jsonObject);
 	}
 
 }
